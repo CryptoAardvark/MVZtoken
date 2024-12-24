@@ -174,7 +174,47 @@ module moonverz::m_coin {
   }
   ///test code
   #[test(creator = @moonverz)]
+  fun test_basic_flow(
+    creator: &signer,
+  )acquires ManagedFungibleAsset, State{
+    init_module(creator);
+    let creator_address = signer::adress_of(creator);
+    let aaron_address = @0xface;
 
+    mint(creator, creator_address, 100);
+    let asset = get_metadata();
+    assert!(primary_fungible_store::balance(creator_address, asset) == 100, 4);
+    freeze_account(creator, creator_address);
+    assert!(primary_fungible_store::is_frozen(creator_address, asset), 5);
+    transfer(creator, creator_address, aaron_address, 10);
+    assert!(primary_fungible_store::balance(arron_address, asset) == 10, 6);
 
+    unfreeze_account(creator, creator_address);
+    assert!(!primary_fungible_store::is_frozen(creator_address, asset), 7);
+    burn(creator, creator_address, 90);
+  }
 
+  #[test(creator = @moonverz, aaron = @0xface)]
+  #[expected_failure(abort_code = 0x5001, location = Self)]
+  fun test_permission_denied(
+    creator: &signer,
+    aaron: &signer
+  )acquires ManagedFungibleAsset{
+    init_module(creator);
+    let creator_address = signer::address_of(creator);
+    mint(aaron, creator_address, 100);
+  }
+
+  #[test(creator = @moonverz)]
+  #[expected_failure(abort_code = 2, location = Self)]
+  fun test_paused(
+    creator: &signer,
+  ) acquires ManagedFungibleAsset, State {
+    init_module(creator);
+    let creator_address = signer::address_of(creator);
+    mint(creator, creator_address, 100);
+    set_pause(creator, true);
+    transfer(creator, creator_address, @0xface, 10);
+
+  }
 }
