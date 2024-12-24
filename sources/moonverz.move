@@ -172,6 +172,8 @@ module moonverz::m_coin {
     assert!(object::is_owner(asset, signer::address_of(owner)), error::permission_denied(ENOT_OWNER));
     borrow_global<ManagedFungibleAsset>(object::object_address(&asset))
   }
+  ///test code
+  #[test(creator = @moonverz)]
 
 
 
