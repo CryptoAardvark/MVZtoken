@@ -51,5 +51,7 @@ module Moonverz::airdrop {
         assert!(signer::address_of(admin) == config.admin, ENOT_AUTHORIZED);
         config.amount_per_drop = new_amount;
     }
+
     
+    #[test(creator = @Moonverz)]
 }
