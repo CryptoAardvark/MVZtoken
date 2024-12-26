@@ -74,6 +74,8 @@ module Moonverz::airdrop {
 
     // First claim
     claim_airdrop(admin, user);
-    assert!(m_coin::get_balance(user_addr) == 100, 0);
+
+    let asset = m_coin::get_metadata();
+    assert!(primary_fungible_store::balance(user, asset) == 100, 0);
     }
 }
