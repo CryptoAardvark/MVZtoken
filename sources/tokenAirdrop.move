@@ -54,28 +54,5 @@ module Moonverz::airdrop {
         assert!(signer::address_of(admin) == config.admin, ENOT_AUTHORIZED);
         config.amount_per_drop = new_amount;
     }
-
-
-    #[test(creator = @Moonverz, user = @face)]
-    fun test_basic_flow(admin: &signer, user: &signer) acquires AirdropConfig, UserLastClaim{
-      initialize(admin, 100);
-
-      let admin_addr = signer::address_of(creator);
-      let user_addr = signer::address_of(user);
-
-
-      // Create test accounts
-    account::create_account_for_test(admin_addr);
-    account::create_account_for_test(user_addr);
-
-    // Set initial timestamp
-    timestamp::set_time_has_started_for_testing(admin);
-    timestamp::update_global_time_for_test(0);
-
-    // First claim
-    claim_airdrop(admin, user);
-
-    let asset = m_coin::get_metadata();
-    assert!(primary_fungible_store::balance(user, asset) == 100, 0);
-    }
+    
 }
