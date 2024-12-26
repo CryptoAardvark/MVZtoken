@@ -52,6 +52,9 @@ module Moonverz::airdrop {
         config.amount_per_drop = new_amount;
     }
 
-    
-    #[test(creator = @Moonverz)]
+
+    #[test(creator = @Moonverz, user = @face)]
+    fun test_basic_flow(admin: &signer, user: &signer) acquires AirdropConfig, UserLastClaim{
+      initialize(admin, 100);
+    }
 }
