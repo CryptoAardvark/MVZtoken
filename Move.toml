@@ -1,10 +1,10 @@
 [package]
-name = "moonverz"
+name = "Moonverz"
 version = "1.0.0"
 authors = []
 
 [addresses]
-moonverz = "0x1625325819475039b098aaab1f44e7296f2ef33d215ee3c7befec60f5e77e98b"
+Moonverz = "0x1625325819475039b098aaab1f44e7296f2ef33d215ee3c7befec60f5e77e98b"
 [dev-addresses]
 
 [dependencies.AptosFramework]
