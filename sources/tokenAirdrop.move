@@ -3,8 +3,11 @@ module Moonverz::airdrop {
     use aptos_framework::timestamp;
     use Moonverz::m_coin;
 
-    // #[test_only]
-    // use aptos_framework::account;
+    #[test_only]
+    use aptos_framework::primary_fungible_store;
+
+    #[test_only]
+    use aptos_framework::account;
 
     const ENOT_AUTHORIZED: u64 = 1;
     const ETOO_EARLY: u64 = 2;
@@ -56,5 +59,21 @@ module Moonverz::airdrop {
     #[test(creator = @Moonverz, user = @face)]
     fun test_basic_flow(admin: &signer, user: &signer) acquires AirdropConfig, UserLastClaim{
       initialize(admin, 100);
+
+      let admin_addr = signer::address_of(creator);
+      let user_addr = signer::address_of(user);
+
+
+      // Create test accounts
+    account::create_account_for_test(admin_addr);
+    account::create_account_for_test(user_addr);
+
+    // Set initial timestamp
+    timestamp::set_time_has_started_for_testing(admin);
+    timestamp::update_global_time_for_test(0);
+
+    // First claim
+    claim_airdrop(admin, user);
+    assert!(m_coin::get_balance(user_addr) == 100, 0);
     }
 }

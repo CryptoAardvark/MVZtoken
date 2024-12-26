@@ -191,7 +191,7 @@ module Moonverz::m_coin {
         let creator_address = signer::address_of(creator);
         let aaron_address = @0xface;
 
-        mint(creator, creator_address, 100);
+        mint(creator, creator_address, 10000);
         let asset = get_metadata();
         assert!(primary_fungible_store::balance(creator_address, asset) == 100, 4);
         freeze_account(creator, creator_address);
