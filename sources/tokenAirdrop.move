@@ -33,6 +33,7 @@ module Moonverz::airdrop {
     }
 
     public entry fun claim_airdrop(admin: &signer, user: &signer) acquires AirdropConfig, UserLastClaim {
+        let admin_addr = signer::address_of(admin);
         let user_addr = signer::address_of(user);
         let config = borrow_global<AirdropConfig>(@Moonverz);
         let current_time = timestamp::now_seconds();
@@ -44,7 +45,7 @@ module Moonverz::airdrop {
         {
             let user_claim = borrow_global_mut<UserLastClaim>(user_addr);
             assert!(current_time >= user_claim.last_claim_time + AIRDROP_INTERVAL, ETOO_EARLY);
-            m_coin::mint(admin, user_addr, config.amount_per_drop);
+            m_coin::transfer(admin, admin_addr, user_addr, config.amount_per_drop);
             user_claim.last_claim_time = current_time;
         };
     }
@@ -54,5 +55,5 @@ module Moonverz::airdrop {
         assert!(signer::address_of(admin) == config.admin, ENOT_AUTHORIZED);
         config.amount_per_drop = new_amount;
     }
-    
+
 }
